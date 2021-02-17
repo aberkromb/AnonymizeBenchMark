@@ -38,19 +38,19 @@ namespace Anonymize.Benchmark
         
         public static void Main(string[] args)
         { 
-            var jsonString = File.ReadAllText("Resources/JsonSample.json");
-            var recursiveReplace = new RecursiveReplace();
-            var regexReplace = new RegexReplace();
-
-            var recursiveRepalceResult = recursiveReplace.ReplaceJsonForbiddenVariables(jsonString);
-            Console.WriteLine(recursiveRepalceResult);
-
-
-            var regexReplaceResult = regexReplace.ReplaceJsonForbiddenVariables(jsonString);
-            Console.WriteLine(regexReplaceResult);
+            // var jsonString = File.ReadAllText("Resources/JsonSample.json");
+            // var recursiveReplace = new RecursiveReplace();
+            // var regexReplace = new RegexReplace();
+            //
+            // var recursiveRepalceResult = recursiveReplace.ReplaceJsonForbiddenVariables(jsonString);
+            // Console.WriteLine(recursiveRepalceResult);
+            //
+            //
+            // var regexReplaceResult = regexReplace.ReplaceJsonForbiddenVariables(jsonString);
+            // Console.WriteLine(regexReplaceResult);
+            //
             
-            
-            // var summary = BenchmarkRunner.Run(typeof(Program).Assembly);
+            var summary = BenchmarkRunner.Run(typeof(Program).Assembly);
         }
     }
 }

@@ -21,6 +21,8 @@ namespace Anonymize.Benchmark
                 foreach (Match match in matchCollection)
                 {
                     string replacement;
+                    // значение в json специально выдилил в группу, чтобы проще было с ним работать
+                    // потому далее по тексту везде обращаюсь к группе
                     if (match.Groups[1].Value == "Chocolate")
                     {
                         replacement = "BINGO!";
