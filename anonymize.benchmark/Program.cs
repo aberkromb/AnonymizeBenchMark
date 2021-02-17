@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Anonymize.Benchmark.Models;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
@@ -37,15 +38,19 @@ namespace Anonymize.Benchmark
         
         public static void Main(string[] args)
         { 
-            // var jsonString = File.ReadAllText("Resources/JsonSample.json");
-            // var recursiveReplace = new RecursiveReplace();
-            // var regexReplace = new RegexReplace();
-            //
-            // Console.WriteLine(recursiveReplace.ReplaceJsonForbiddenVariables(jsonString));
-            //
-            // Console.WriteLine(regexReplace.ReplaceJsonForbiddenVariables(jsonString));
-            //
-            var summary = BenchmarkRunner.Run(typeof(Program).Assembly);
+            var jsonString = File.ReadAllText("Resources/JsonSample.json");
+            var recursiveReplace = new RecursiveReplace();
+            var regexReplace = new RegexReplace();
+
+            var recursiveRepalceResult = recursiveReplace.ReplaceJsonForbiddenVariables(jsonString);
+            Console.WriteLine(recursiveRepalceResult);
+
+
+            var regexReplaceResult = regexReplace.ReplaceJsonForbiddenVariables(jsonString);
+            Console.WriteLine(regexReplaceResult);
+            
+            
+            // var summary = BenchmarkRunner.Run(typeof(Program).Assembly);
         }
     }
 }

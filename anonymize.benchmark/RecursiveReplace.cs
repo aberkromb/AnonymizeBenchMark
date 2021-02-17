@@ -25,11 +25,11 @@ namespace Anonymize.Benchmark
                         ReplaceJsonForbiddenTags(jItem as JObject);
                     }
 
-                    return JsonConvert.SerializeObject(jArray, Formatting.None);
+                    return JsonConvert.SerializeObject(jArray, Formatting.Indented);
                 }
 
                 ReplaceJsonForbiddenTags(deserializedRequest as JObject);
-                return JsonConvert.SerializeObject(deserializedRequest, Formatting.None);
+                return JsonConvert.SerializeObject(deserializedRequest, Formatting.Indented);
             }
             catch (Exception ex)
             {

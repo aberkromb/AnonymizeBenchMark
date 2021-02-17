@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -8,15 +10,18 @@ namespace Anonymize.Benchmark
     {
         public string ReplaceJsonForbiddenVariables(string jsonStr)
         {
+            var listReplacements = new List<(int, int, string)>();
+
             foreach (var param in Program.AnonymizePattern.Params)
             {
-                var pattern = $"(?<=\"{param}\"+ *: *\"+).*(?=\")";
-                var matchCollection = Regex.Matches(jsonStr, pattern, RegexOptions.IgnoreCase);
-                
-                foreach (Match match in matchCollection.Reverse())
+                // var pattern = $"(\"{param}\"+ *: *\"+).*(?=\")";
+                var pattern = $"\"{param}\":\"(\\w*)\"";
+                var matchCollection = Regex.Matches(jsonStr, pattern, RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+                foreach (Match match in matchCollection)
                 {
                     string replacement;
-                    if (match.Value == "Chocolate")
+                    if (match.Groups[1].Value == "Chocolate")
                     {
                         replacement = "BINGO!";
                     }
@@ -24,21 +29,31 @@ namespace Anonymize.Benchmark
                     {
                         replacement = "************";
                     }
-                    
-                    jsonStr = Replace(jsonStr, match.Index, match.Length, replacement);
+
+                    listReplacements.Add((match.Groups[1].Index, match.Groups[1].Length, replacement));
                 }
             }
 
-            return jsonStr;
+            return Replace(jsonStr, listReplacements.OrderBy(tuple => tuple.Item1));
         }
-        
-        private string Replace(string s, int index, int length, string replacement)
+
+        private string Replace(string jsonStr, IOrderedEnumerable<(int, int, string)> listReplacements)
         {
-            var builder = new StringBuilder();
-            builder.Append(s.Substring(0,index));
-            builder.Append(replacement);
-            builder.Append(s.Substring(index + length));
-            return builder.ToString();
+            var sb = new StringBuilder();
+            var currentIndex = 0;
+
+            var jsonSpan = jsonStr.AsSpan();
+            
+            foreach (var (index, length, replace) in listReplacements)
+            {
+                sb.Append(jsonSpan.Slice(currentIndex, index - currentIndex));
+                sb.Append(replace);
+                currentIndex = index + length;
+            }
+
+            sb.Append(jsonSpan.Slice(currentIndex));
+
+            return sb.ToString();
         }
     }
 }
